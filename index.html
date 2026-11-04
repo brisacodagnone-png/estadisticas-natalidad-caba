@@ -1,0 +1,474 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f5f7f0">
+  <title>Nacer en Buenos Aires | Estadística</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,600;9..144,700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      color-scheme: light;
+      --paper: #f5f7f0;
+      --white: #fff;
+      --ink: #1d302b;
+      --muted: #65736c;
+      --line: #dce3d9;
+      --green: #147c68;
+      --green-dark: #0d594b;
+      --lime: #d8ef73;
+      --coral: #ee7156;
+      --pale-green: #e8f0e8;
+      --sans: "DM Sans", "Trebuchet MS", sans-serif;
+      --serif: "Fraunces", Georgia, serif;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background-color: var(--paper);
+      background-image: radial-gradient(#dce3d9 0.65px, transparent 0.65px);
+      background-size: 15px 15px;
+      color: var(--ink);
+      font-family: var(--sans);
+      line-height: 1.55;
+    }
+    a { color: inherit; }
+    button { font: inherit; }
+    .shell { width: min(1120px, calc(100% - 48px)); margin-inline: auto; }
+
+    .topbar {
+      min-height: 66px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--line);
+      font-size: 13px;
+    }
+    .brand { display: flex; align-items: center; gap: 10px; font-weight: 700; }
+    .brand-mark {
+      display: grid;
+      width: 28px;
+      height: 28px;
+      place-items: center;
+      border-radius: 50%;
+      background: var(--green);
+      color: var(--white);
+      font-size: 12px;
+    }
+    .topbar nav { display: flex; gap: 24px; color: var(--muted); }
+    .topbar nav a { text-decoration: none; }
+    .topbar nav a:hover { color: var(--green-dark); }
+
+    .intro {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 250px;
+      align-items: end;
+      gap: 42px;
+      padding-block: 74px 50px;
+      animation: arrive 650ms ease-out both;
+    }
+    .eyebrow, .section-index {
+      margin: 0 0 13px;
+      color: var(--green-dark);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+    h1, h2, p { margin-top: 0; }
+    h1 {
+      max-width: 700px;
+      margin-bottom: 16px;
+      font-family: var(--serif);
+      font-size: clamp(42px, 6vw, 72px);
+      font-weight: 600;
+      line-height: 0.99;
+    }
+    h1 span { color: var(--green); }
+    .intro-copy { max-width: 610px; margin: 0; color: #4e6058; font-size: 17px; }
+    .hero-stat {
+      position: relative;
+      display: flex;
+      min-height: 172px;
+      flex-direction: column;
+      justify-content: center;
+      padding: 24px 26px;
+      overflow: hidden;
+      background: var(--lime);
+      border-radius: 3px;
+    }
+    .hero-stat::after {
+      position: absolute;
+      right: -24px;
+      bottom: -55px;
+      width: 140px;
+      height: 140px;
+      border: 1px solid rgb(29 48 43 / 20%);
+      border-radius: 50%;
+      box-shadow: 0 0 0 12px rgb(29 48 43 / 4%), 0 0 0 26px rgb(29 48 43 / 4%);
+      content: "";
+    }
+    .hero-stat strong { font-family: var(--serif); font-size: 52px; font-weight: 600; line-height: 1; }
+    .hero-stat span { max-width: 155px; margin-top: 12px; font-size: 13px; line-height: 1.35; }
+    .hero-stat small { position: absolute; top: 18px; right: 18px; font-size: 11px; font-weight: 700; }
+
+    .chart-section {
+      padding: 34px 34px 28px;
+      background: var(--white);
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      box-shadow: 0 16px 44px rgb(29 48 43 / 5%);
+      animation: arrive 700ms 100ms ease-out both;
+    }
+    .section-heading { display: flex; justify-content: space-between; align-items: start; gap: 22px; }
+    .section-heading h2, .lesson h2 {
+      margin-bottom: 5px;
+      font-family: var(--serif);
+      font-size: 30px;
+      font-weight: 600;
+      line-height: 1.15;
+    }
+    .section-heading p { margin-bottom: 0; color: var(--muted); font-size: 14px; }
+    .download {
+      flex: 0 0 auto;
+      padding: 9px 13px;
+      border: 1px solid var(--line);
+      border-radius: 3px;
+      background: var(--white);
+      color: var(--green-dark);
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .download:hover { border-color: var(--green); background: var(--pale-green); }
+    .chart-scroll { margin: 24px -10px 0; overflow-x: auto; scrollbar-color: #aab9ad transparent; }
+    #birth-chart { display: block; width: 100%; min-width: 760px; height: auto; }
+    .chart-scroll:focus-visible { outline: 3px solid var(--green); outline-offset: 4px; }
+    .chart-note { display: flex; justify-content: space-between; gap: 20px; padding-top: 13px; border-top: 1px solid var(--line); color: var(--muted); font-size: 12px; }
+    .chart-note strong { color: var(--ink); }
+    .selected-data {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 17px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .selected-data strong { color: var(--ink); font-size: 15px; }
+    .selected-dot { width: 9px; height: 9px; border-radius: 50%; background: var(--coral); }
+
+    .lesson {
+      display: grid;
+      grid-template-columns: 0.92fr 1.08fr;
+      gap: 54px;
+      padding-block: 72px 68px;
+    }
+    .lesson-copy { max-width: 430px; }
+    .lesson-copy > p:last-child { margin-bottom: 0; color: #4e6058; }
+    .formula {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-top: 24px;
+      padding: 17px 18px;
+      border-left: 4px solid var(--green);
+      background: var(--pale-green);
+      font-size: 14px;
+    }
+    .formula-symbol { color: var(--green-dark); font-family: var(--serif); font-size: 28px; }
+    .formula small { display: block; color: var(--muted); font-size: 11px; }
+    .steps { display: grid; align-content: start; }
+    .step { display: grid; grid-template-columns: 34px 1fr; gap: 14px; padding: 15px 0; border-bottom: 1px solid var(--line); }
+    .step:first-child { padding-top: 0; }
+    .step-number { display: grid; width: 28px; height: 28px; place-items: center; border: 1px solid #b7c5b8; border-radius: 50%; color: var(--green-dark); font-size: 12px; font-weight: 700; }
+    .step p { margin: 0; font-size: 14px; }
+    .step strong { color: var(--green-dark); }
+
+    .reading {
+      display: grid;
+      grid-template-columns: minmax(190px, 0.7fr) 1.3fr;
+      align-items: center;
+      gap: 44px;
+      padding: 28px 32px;
+      background: var(--green-dark);
+      color: var(--white);
+    }
+    .reading-number { color: var(--lime); font-family: var(--serif); font-size: 44px; line-height: 1; }
+    .reading-number small { display: block; margin-top: 8px; color: #d2e0d7; font-family: var(--sans); font-size: 11px; }
+    .reading-copy h2 { margin-bottom: 6px; font-family: var(--serif); font-size: 24px; font-weight: 600; }
+    .reading-copy p { max-width: 640px; margin: 0; color: #e0ebe4; font-size: 14px; }
+
+    details { margin-block: 34px 60px; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+    summary { padding: 17px 0; cursor: pointer; font-size: 14px; font-weight: 700; }
+    summary::marker { color: var(--green); }
+    .table-wrap { overflow-x: auto; padding-bottom: 18px; }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; text-align: left; }
+    th, td { padding: 9px 12px; border-bottom: 1px solid var(--line); }
+    th { color: var(--muted); font-size: 11px; text-transform: uppercase; }
+    td:last-child, th:last-child { text-align: right; }
+    tbody tr:last-child td { border-bottom: 0; }
+
+    footer { padding: 18px 0 30px; border-top: 1px solid var(--line); color: var(--muted); font-size: 12px; }
+    footer p { margin: 0; }
+    footer a { color: var(--green-dark); text-underline-offset: 3px; }
+    .footer-meta { display: flex; justify-content: space-between; gap: 20px; }
+
+    @keyframes arrive { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; }
+    }
+    @media (min-width: 1180px) {
+      .landscape {
+        display: grid;
+        grid-template-columns: minmax(0, 1.8fr) minmax(360px, 0.9fr);
+        align-items: start;
+        gap: 18px 24px;
+      }
+      .landscape .intro { grid-column: 1 / -1; padding-block: 28px 8px; }
+      .landscape .chart-section { grid-column: 1; grid-row: 2; }
+      .landscape .lesson {
+        grid-column: 2;
+        grid-row: 2;
+        grid-template-columns: 1fr;
+        gap: 24px;
+        padding-block: 10px 0;
+      }
+      .landscape .lesson-copy { max-width: none; }
+      .landscape .reading {
+        grid-column: 2;
+        grid-row: 3;
+        grid-template-columns: 1fr;
+        gap: 12px;
+        padding: 22px;
+      }
+      .landscape details { grid-column: 2; grid-row: 4; margin-block: 10px 24px; }
+    }
+    @media (max-width: 700px) {
+      .shell { width: min(100% - 32px, 540px); }
+      .topbar { min-height: 58px; }
+      .topbar nav { gap: 13px; font-size: 11px; }
+      .intro { grid-template-columns: 1fr; gap: 24px; padding-block: 48px 34px; }
+      h1 { font-size: clamp(43px, 12vw, 60px); }
+      .intro-copy { font-size: 15px; }
+      .hero-stat { min-height: 120px; padding: 18px 21px; }
+      .hero-stat strong { font-size: 42px; }
+      .hero-stat span { max-width: 210px; margin-top: 5px; }
+      .chart-section { padding: 23px 17px 20px; }
+      .section-heading { flex-direction: column; }
+      .section-heading h2, .lesson h2 { font-size: 26px; }
+      .download { align-self: start; }
+      .chart-note { flex-direction: column; gap: 3px; }
+      .lesson { grid-template-columns: 1fr; gap: 30px; padding-block: 54px; }
+      .reading { grid-template-columns: 1fr; gap: 18px; padding: 24px; }
+      .reading-number { font-size: 38px; }
+      .footer-meta { flex-direction: column; gap: 8px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar shell">
+    <a class="brand" href="#inicio" aria-label="Inicio, Estadística en contexto">
+      <span class="brand-mark" aria-hidden="true">∑</span>
+      <span>Estadística en contexto</span>
+    </a>
+    <nav aria-label="Secciones">
+      <a href="#grafico">Gráfico</a>
+      <a href="#concepto">La tasa</a>
+      <a href="#datos">Datos</a>
+    </nav>
+  </header>
+
+  <main id="inicio" class="shell landscape">
+    <section class="intro" aria-labelledby="page-title">
+      <div>
+        <p class="eyebrow">Matemática · 6.º año · Estadística</p>
+        <h1 id="page-title">Nacer en <span>Buenos Aires</span></h1>
+        <p class="intro-copy">¿Cómo cambió la natalidad en la Ciudad Autónoma de Buenos Aires? Leemos una serie real, interpretamos sus unidades y aprendemos qué cuenta una tasa.</p>
+      </div>
+      <aside class="hero-stat" aria-label="En 2024, 6,9 nacimientos por cada mil habitantes">
+        <small>2024</small>
+        <strong>6,9‰</strong>
+        <span>nacimientos por cada 1.000 habitantes</span>
+      </aside>
+    </section>
+
+    <section id="grafico" class="chart-section" aria-labelledby="chart-title">
+      <div class="section-heading">
+        <div>
+          <p class="section-index">01 / La serie</p>
+          <h2 id="chart-title">Una tasa que cambia con el tiempo</h2>
+          <p>Ciudad Autónoma de Buenos Aires · 2010–2024</p>
+        </div>
+        <button id="download-data" class="download" type="button" title="Descargar la serie en formato CSV">↓ Descargar datos</button>
+      </div>
+      <div class="chart-scroll" tabindex="0" aria-label="Gráfico desplazable; barras verticales de 2010 a 2024">
+        <svg id="birth-chart" viewBox="0 0 960 390" role="img" aria-labelledby="svg-title svg-desc">
+          <title id="svg-title">Tasa bruta de natalidad de CABA, de 2010 a 2024</title>
+          <desc id="svg-desc">Gráfico de barras verticales. La tasa baja de 14,6 nacimientos por mil habitantes en 2010 a 6,9 en 2024.</desc>
+        </svg>
+      </div>
+      <div class="chart-note">
+        <span><strong>Eje vertical:</strong> nacimientos por cada 1.000 habitantes</span>
+        <span>Seleccioná una barra para ver el valor exacto</span>
+      </div>
+      <div class="selected-data" aria-live="polite">
+        <span class="selected-dot" aria-hidden="true"></span>
+        <span id="selected-label">Dato seleccionado:</span>
+        <strong id="selected-value">2024 · 6,9‰</strong>
+      </div>
+    </section>
+
+    <section id="concepto" class="lesson" aria-labelledby="concept-title">
+      <div class="lesson-copy">
+        <p class="section-index">02 / La idea matemática</p>
+        <h2 id="concept-title">¿Qué significa “por mil”?</h2>
+        <p>La <strong>tasa bruta de natalidad</strong> relaciona los nacimientos ocurridos durante un año con la población total de ese lugar. Se expresa por cada 1.000 habitantes para que sea más fácil comparar poblaciones de distinto tamaño.</p>
+        <div class="formula" aria-label="Tasa bruta de natalidad igual a nacidos vivos dividido por la población total, multiplicado por mil">
+          <span class="formula-symbol">÷</span>
+          <span><strong>(nacidos vivos ÷ población total) × 1.000</strong><small>La población de referencia corresponde al mismo año.</small></span>
+        </div>
+      </div>
+      <div class="steps" aria-label="Cómo interpretar el dato de 2024">
+        <div class="step"><span class="step-number">1</span><p>Buscamos el año <strong>2024</strong> en el eje horizontal.</p></div>
+        <div class="step"><span class="step-number">2</span><p>La altura de su barra marca <strong>6,9</strong> en el eje vertical.</p></div>
+        <div class="step"><span class="step-number">3</span><p>En promedio, hubo cerca de <strong>7 nacimientos por cada 1.000 habitantes</strong> ese año.</p></div>
+      </div>
+    </section>
+
+    <aside class="reading" aria-labelledby="reading-title">
+      <div class="reading-number">−52,7%<small>variación entre 2010 y 2024</small></div>
+      <div class="reading-copy">
+        <h2 id="reading-title">¿Qué muestra la comparación?</h2>
+        <p>La tasa pasó de 14,6‰ a 6,9‰: una diferencia de 7,7 nacimientos por cada 1.000 habitantes. En términos relativos, el valor de 2024 es un 52,7% menor que el de 2010. Esto describe la tasa, no la cantidad total de nacimientos.</p>
+      </div>
+    </aside>
+
+    <details id="datos">
+      <summary>Ver los datos anuales de la serie</summary>
+      <div class="table-wrap">
+        <table>
+          <caption class="visually-hidden">Tasa bruta de natalidad por año en la Ciudad Autónoma de Buenos Aires</caption>
+          <thead><tr><th scope="col">Año</th><th scope="col">Nacimientos por 1.000 habitantes</th></tr></thead>
+          <tbody id="data-table"></tbody>
+        </table>
+      </div>
+    </details>
+  </main>
+
+  <footer>
+    <div class="shell footer-meta">
+      <p>Fuente: <a href="https://estadisticaciudad.gob.ar/si/demog/principal-indicador?indicador=a1b2" target="_blank" rel="noreferrer">Instituto de Estadística y Censos de la Ciudad Autónoma de Buenos Aires (IDECBA)</a>. Estadísticas vitales y proyecciones de población.</p>
+      <p>Tasa bruta de natalidad · nacidas/os vivos por mil habitantes</p>
+    </div>
+  </footer>
+
+  <style>.visually-hidden { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }</style>
+  <script>
+    const data = [
+      { year: 2010, rate: 14.6 }, { year: 2011, rate: 14.6 }, { year: 2012, rate: 14.1 },
+      { year: 2013, rate: 14.0 }, { year: 2014, rate: 14.0 }, { year: 2015, rate: 13.4 },
+      { year: 2016, rate: 12.7 }, { year: 2017, rate: 11.4 }, { year: 2018, rate: 11.3 },
+      { year: 2019, rate: 10.9 }, { year: 2020, rate: 9.0 }, { year: 2021, rate: 8.3 },
+      { year: 2022, rate: 7.8 }, { year: 2023, rate: 7.7 }, { year: 2024, rate: 6.9 }
+    ];
+
+    const svg = document.querySelector("#birth-chart");
+    const chart = { left: 58, right: 20, top: 30, bottom: 58, max: 16 };
+    const plotWidth = 960 - chart.left - chart.right;
+    const plotHeight = 390 - chart.top - chart.bottom;
+    const step = plotWidth / data.length;
+    const barWidth = 34;
+    const svgNS = "http://www.w3.org/2000/svg";
+    const formatRate = value => value.toLocaleString("es-AR", { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+    const addSvg = (tag, attributes, text) => {
+      const element = document.createElementNS(svgNS, tag);
+      for (const [name, value] of Object.entries(attributes)) element.setAttribute(name, value);
+      if (text !== undefined) element.textContent = text;
+      svg.append(element);
+      return element;
+    };
+
+    for (let tick = 0; tick <= chart.max; tick += 4) {
+      const y = chart.top + plotHeight - (tick / chart.max) * plotHeight;
+      addSvg("line", { x1: chart.left, y1: y, x2: 940, y2: y, stroke: "#e6ebe5", "stroke-width": 1 });
+      addSvg("text", { x: chart.left - 13, y: y + 4, fill: "#748078", "font-size": 11, "text-anchor": "end", "font-family": "DM Sans, sans-serif" }, String(tick));
+    }
+
+    data.forEach((item, index) => {
+      const x = chart.left + index * step + (step - barWidth) / 2;
+      const height = (item.rate / chart.max) * plotHeight;
+      const y = chart.top + plotHeight - height;
+      const group = addSvg("g", {
+        class: "bar-group",
+        tabindex: 0,
+        role: "button",
+        "aria-label": `${item.year}: ${formatRate(item.rate)} nacimientos por mil habitantes`,
+        "aria-pressed": item.year === 2024 ? "true" : "false"
+      });
+      const rect = document.createElementNS(svgNS, "rect");
+      rect.setAttribute("x", x);
+      rect.setAttribute("y", y);
+      rect.setAttribute("width", barWidth);
+      rect.setAttribute("height", height);
+      rect.setAttribute("rx", 2);
+      rect.setAttribute("fill", item.year === 2024 ? "#ee7156" : "#147c68");
+      rect.setAttribute("class", "bar-rect");
+      group.append(rect);
+      const valueLabel = document.createElementNS(svgNS, "text");
+      valueLabel.setAttribute("x", x + barWidth / 2);
+      valueLabel.setAttribute("y", y - 9);
+      valueLabel.setAttribute("text-anchor", "middle");
+      valueLabel.setAttribute("fill", "#30443c");
+      valueLabel.setAttribute("font-size", "11");
+      valueLabel.setAttribute("font-weight", "700");
+      valueLabel.setAttribute("font-family", "DM Sans, sans-serif");
+      valueLabel.textContent = formatRate(item.rate);
+      group.append(valueLabel);
+      const yearLabel = document.createElementNS(svgNS, "text");
+      yearLabel.setAttribute("x", x + barWidth / 2);
+      yearLabel.setAttribute("y", chart.top + plotHeight + 24);
+      yearLabel.setAttribute("text-anchor", "middle");
+      yearLabel.setAttribute("fill", "#65736c");
+      yearLabel.setAttribute("font-size", "10");
+      yearLabel.setAttribute("font-family", "DM Sans, sans-serif");
+      yearLabel.textContent = String(item.year);
+      group.append(yearLabel);
+
+      const selectBar = () => {
+        document.querySelectorAll(".bar-group").forEach(bar => {
+          const selected = bar === group;
+          bar.setAttribute("aria-pressed", String(selected));
+          bar.querySelector(".bar-rect").setAttribute("fill", selected ? "#ee7156" : "#147c68");
+        });
+        document.querySelector("#selected-label").textContent = "Dato seleccionado:";
+        document.querySelector("#selected-value").textContent = `${item.year} · ${formatRate(item.rate)}‰`;
+      };
+      group.addEventListener("click", selectBar);
+      group.addEventListener("keydown", event => {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          selectBar();
+        }
+      });
+    });
+
+    document.querySelector("#data-table").innerHTML = data.map(item =>
+      `<tr><td>${item.year}</td><td>${formatRate(item.rate)}‰</td></tr>`
+    ).join("");
+
+    document.querySelector("#download-data").addEventListener("click", () => {
+      const rows = ["anio,tasa_bruta_natalidad_por_mil_habitantes", ...data.map(item => `${item.year},${formatRate(item.rate).replace(",", ".")}`)];
+      const file = new Blob(["\uFEFF" + rows.join("\n")], { type: "text/csv;charset=utf-8" });
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(file);
+      link.download = "natalidad-caba-2010-2024.csv";
+      link.click();
+      URL.revokeObjectURL(link.href);
+    });
+  </script>
+</body>
+</html>
